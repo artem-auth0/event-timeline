@@ -3,12 +3,11 @@ import { NextRequest } from 'next/server'
 const API_BASE_URL = 'https://api.goperigon.com/v1'
 const API_KEY = process.env.PERIGON_API_KEY
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const query = searchParams.get('id')
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params // Get id from route params
 
   try {
-    const response = await fetch(`${API_BASE_URL}/all?apiKey=${API_KEY}&articleId=${query}`, {
+    const response = await fetch(`${API_BASE_URL}/all?apiKey=${API_KEY}&articleId=${id}`, {
       headers: {
         'Content-Type': 'application/json',
       },

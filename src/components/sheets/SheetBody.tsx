@@ -1,5 +1,4 @@
-import Image from 'next/image'
-
+import { ArticleImage } from '@/components/sheets/article/ArticleImage'
 import { ArticleLink } from '@/components/sheets/article/ArticleLink'
 import { ArticleSentiment } from '@/components/sheets/article/ArticleSentiment'
 import { ArticleSummary } from '@/components/sheets/article/ArticleSummary'
@@ -26,17 +25,6 @@ export function SheetBody({ isLoading, articleDetails }: SheetBodyProps) {
     <div>
       <ArticleImage imageUrl={articleDetails.imageUrl} />
       <ArticleContent articleDetails={articleDetails} />
-    </div>
-  )
-}
-
-function ArticleImage({ imageUrl }: { imageUrl: string }) {
-  if (!imageUrl) return null
-
-  return (
-    <div className="relative h-48 w-full">
-      <Image alt="" className="h-full w-full object-cover" src={imageUrl} />
-      <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
     </div>
   )
 }
