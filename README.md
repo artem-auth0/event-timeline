@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# News Feed Application
+
+A modern news feed application built with Next.js and shadcn/ui components, featuring real-time news updates, article details, and theme customization.
+
+## Features & Functionality
+
+### Real-time News Feed
+
+- 📰 Live updates of news articles and events
+- ♾️ Infinite scrolling for seamless content loading
+- 🔄 Automatic refresh of content every 60 seconds
+- 📱 Responsive grid layout adapting to all screen sizes
+
+### Article Details
+
+- 📊 Sentiment analysis showing article tone (positive/negative/neutral)
+- 📍 Location information for news sources
+- 🏢 Company mentions and stock symbols
+- 🏷️ Category tags for easy classification
+- 📅 Publication date and source information
+- 🔗 Direct links to original articles
+
+### User Experience
+
+- 🎨 Light/Dark mode theme support
+- 💫 Smooth animations and transitions
+- 🔍 Detailed article view in a sliding panel
+- 📱 Mobile-first responsive design
+- ⚡ Fast loading with optimized images
+- ♿ Accessibility features for screen readers
+
+### Technical Features
+
+- 🔄 Real-time data updates
+- 🎯 Event-driven architecture
+- 📊 Data visualization for sentiment analysis
+- 🛡️ Type-safe development with TypeScript
+- 🎨 Customizable theming system
+- 🧩 Modular component architecture
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- Yarn
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/artem-auth0/event-timeline.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables:
 
-## Learn More
+```env
+PERIGON_API_KEY=your_api_key_here
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+yarn dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Next.js 14](https://nextjs.org/) - React Framework
+- [shadcn/ui](https://ui.shadcn.com/) - UI Components
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Framer Motion](https://www.framer.com/motion/) - Animations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+
+```bash
+# Install dependencies
+yarn install
+
+# Start development server
+yarn dev
+
+# Build for production
+yarn build
+
+# Start production server
+yarn start
+
+# Run linting
+yarn lint
+```
+
+## Deployment
+
+The easiest way to deploy this application is through [Vercel](https://vercel.com):
+
+1. Push your code to a Git repository
+2. Import your repository to Vercel
+3. Add your environment variables
+4. Deploy!
+
+## Theme Customization
+
+The application uses CSS variables for theming. You can customize the theme by modifying the variables in `app/globals.css`:
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  /* ... other variables */
+}
+
+.dark {
+  --background: 224 71% 4%;
+  --foreground: 213 31% 91%;
+  /* ... other variables */
+}
+```
+
+## License
+
+MIT
+
+## Author
+
+Artem Zozulia
