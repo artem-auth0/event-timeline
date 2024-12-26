@@ -18,9 +18,12 @@ export function EventsContainer({ selectedEventType, children }: EventsContainer
 
   if (error) {
     return (
-      <div className="rounded-lg bg-destructive/10 p-4 text-destructive">
-        Error loading events: {error.message}
-      </div>
+      <>
+        {children?.(itemsLeft)}
+        <div className="rounded-lg bg-destructive/10 p-4 text-destructive">
+          Error loading events: {error.message}
+        </div>
+      </>
     )
   }
 
