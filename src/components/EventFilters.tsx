@@ -36,16 +36,17 @@ const eventTypes = [
 interface EventFiltersProps {
   selectedType: string | null
   onTypeChange: (type: string | null) => void
+  className?: string
 }
 
-export function EventFilters({ selectedType, onTypeChange }: EventFiltersProps) {
+export function EventFilters({ selectedType, onTypeChange, className }: EventFiltersProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className={className}>
       <Select
         value={selectedType || 'all'}
         onValueChange={value => onTypeChange(value === 'all' ? null : value)}
       >
-        <SelectTrigger className="w-[250px] border-border bg-background text-foreground hover:bg-accent">
+        <SelectTrigger className="w-full border-border bg-background text-foreground hover:bg-accent sm:w-[250px]">
           <SelectValue placeholder="All Event Types" />
         </SelectTrigger>
         <SelectContent className="border-border bg-background">
