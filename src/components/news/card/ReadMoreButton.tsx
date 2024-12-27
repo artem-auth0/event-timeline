@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -12,7 +13,8 @@ export function ReadMoreButton({ disabled, onClick }: ReadMoreButtonProps) {
     <motion.button
       className={cn(
         'text-sm font-medium text-primary hover:text-primary/80',
-        'disabled:cursor-not-allowed disabled:opacity-50'
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        'flex items-center gap-2'
       )}
       disabled={disabled}
       whileHover={{ x: disabled ? 0 : 4 }}
@@ -21,7 +23,14 @@ export function ReadMoreButton({ disabled, onClick }: ReadMoreButtonProps) {
         onClick()
       }}
     >
-      Read more →
+      {disabled ? (
+        <>
+          <Loader2 className="h-3 w-3 animate-spin" />
+          Loading...
+        </>
+      ) : (
+        'Read more →'
+      )}
     </motion.button>
   )
 }
