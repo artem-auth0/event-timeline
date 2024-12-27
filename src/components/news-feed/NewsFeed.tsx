@@ -41,10 +41,10 @@ export function NewsFeed({
   }
 
   return (
-    <div className="my-8">
+    <div className="my-8 overflow-x-hidden">
       <motion.div
         animate="show"
-        className="grid grid-cols-1 gap-8 md:grid-cols-2"
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8"
         initial="hidden"
         variants={gridAnimation}
       >
