@@ -19,9 +19,10 @@ export function NewsCard({ article, isNewest = false, onReadMore }: NewsCardProp
       ref={cardRef}
       className={cn(
         'group relative flex h-full rounded-xl border',
-        'bg-card transition-shadow duration-300 hover:shadow-lg'
+        'bg-card transition-shadow duration-300 hover:cursor-pointer hover:shadow-lg'
       )}
       whileHover={{ y: -3, scale: 1.03 }}
+      onClick={() => onReadMore(article)}
     >
       <CardContent article={article} config={eventConfig} onReadMore={onReadMore} />
       {isNewest && <NewestCardEffects isNewest={isNewest} />}
