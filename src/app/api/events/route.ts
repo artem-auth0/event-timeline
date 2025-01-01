@@ -1,55 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import {
+  createApiUrl,
+  createErrorResponse,
+  createSuccessResponse,
+  fetchFromApiEndpoint,
+} from '@/lib/api-utils'
 import { ApiError, ApiListResponse, Event } from '@/services/api'
-
-// Types
-interface ApiConfig {
-  readonly baseUrl: string
-  readonly apiKey: string
-}
-
-// Configuration
-const API_CONFIG: ApiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_PERIGON_API_URL ?? '',
-  apiKey: process.env.PERIGON_API_KEY ?? '',
-} as const
-
-// Validators
-function validateConfig(config: ApiConfig): void {
-  if (!config.baseUrl || !config.apiKey) {
-    throw new ApiError(500, 'Missing API configuration')
-  }
-}
 
 // API Service
 async function fetchEvents(searchParams: URLSearchParams): Promise<ApiListResponse<Event>> {
-  validateConfig(API_CONFIG)
-
-  const url = new URL(`${API_CONFIG.baseUrl}/events/all`)
-  // Merge existing search params
-  searchParams.forEach((value, key) => url.searchParams.append(key, value))
-
-  const response = await fetch(url.toString(), {
-    headers: {
-      'x-api-key': API_CONFIG.apiKey,
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new ApiError(response.status, `Failed to fetch events: ${response.statusText}`)
-  }
-
-  return response.json()
-}
-
-// Response handlers
-function createErrorResponse(error: string, status: number): NextResponse {
-  return NextResponse.json({ error }, { status })
-}
-
-function createSuccessResponse<T>(data: T): NextResponse {
-  return NextResponse.json(data)
+  const url = createApiUrl('/events/all', searchParams)
+  return fetchFromApiEndpoint<ApiListResponse<Event>>(url)
 }
 
 // Main handler

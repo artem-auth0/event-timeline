@@ -1,26 +1,14 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
+import {
+  createApiUrl,
+  createErrorResponse,
+  createSuccessResponse,
+  fetchFromApiEndpoint,
+} from '@/lib/api-utils'
 import { ApiError, Event } from '@/services/api'
 
-// Types
-interface ApiConfig {
-  readonly baseUrl: string
-  readonly apiKey: string
-}
-
-// Configuration
-const API_CONFIG: ApiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_PERIGON_API_URL ?? '',
-  apiKey: process.env.PERIGON_API_KEY ?? '',
-} as const
-
 // Validators
-function validateConfig(config: ApiConfig): void {
-  if (!config.baseUrl || !config.apiKey) {
-    throw new ApiError(500, 'Missing API configuration')
-  }
-}
-
 function validateArticleId(id: string): void {
   if (!id || typeof id !== 'string') {
     throw new ApiError(400, 'Invalid article ID')
@@ -29,40 +17,19 @@ function validateArticleId(id: string): void {
 
 // API Service
 async function fetchArticleById(articleId: string): Promise<Event> {
-  validateConfig(API_CONFIG)
   validateArticleId(articleId)
 
-  const url = new URL(`${API_CONFIG.baseUrl}/all`)
-  url.searchParams.append('apiKey', API_CONFIG.apiKey)
+  const url = createApiUrl('/all')
   url.searchParams.append('articleId', articleId)
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new ApiError(response.status, `Failed to fetch article: ${response.statusText}`)
-  }
-
-  return response.json()
-}
-
-// Response handlers
-function createErrorResponse(error: string, status: number): Response {
-  return Response.json({ error }, { status })
-}
-
-function createSuccessResponse(data: Event): Response {
-  return Response.json(data)
+  return fetchFromApiEndpoint<Event>(url)
 }
 
 // Main handler
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-): Promise<Response> {
+): Promise<NextResponse> {
   try {
     const { id } = await params
     const article = await fetchArticleById(id)
