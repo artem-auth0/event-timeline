@@ -37,13 +37,13 @@ export interface Event {
   signals?: Signal[]
 }
 
-interface ApiListResponse<T> {
+export interface ApiListResponse<T> {
   status: number
   numResults: number
   results: T[]
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   constructor(
     public status: number,
     message: string

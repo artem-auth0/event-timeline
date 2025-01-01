@@ -1,27 +1,69 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
-const API_BASE_URL = 'https://api.goperigon.com/v1';
-const API_KEY = process.env.PERIGON_API_KEY;
+import { ApiError, ApiListResponse, Event } from '@/services/api'
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+// Types
+interface ApiConfig {
+  readonly baseUrl: string
+  readonly apiKey: string
+}
 
+// Configuration
+const API_CONFIG: ApiConfig = {
+  baseUrl: process.env.NEXT_PUBLIC_PERIGON_API_URL ?? '',
+  apiKey: process.env.PERIGON_API_KEY ?? '',
+} as const
+
+// Validators
+function validateConfig(config: ApiConfig): void {
+  if (!config.baseUrl || !config.apiKey) {
+    throw new ApiError(500, 'Missing API configuration')
+  }
+}
+
+// API Service
+async function fetchEvents(searchParams: URLSearchParams): Promise<ApiListResponse<Event>> {
+  validateConfig(API_CONFIG)
+
+  const url = new URL(`${API_CONFIG.baseUrl}/events/all`)
+  // Merge existing search params
+  searchParams.forEach((value, key) => url.searchParams.append(key, value))
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'x-api-key': API_CONFIG.apiKey,
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new ApiError(response.status, `Failed to fetch events: ${response.statusText}`)
+  }
+
+  return response.json()
+}
+
+// Response handlers
+function createErrorResponse(error: string, status: number): NextResponse {
+  return NextResponse.json({ error }, { status })
+}
+
+function createSuccessResponse<T>(data: T): NextResponse {
+  return NextResponse.json(data)
+}
+
+// Main handler
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/events/all?${searchParams.toString()}`, {
-      headers: {
-        'x-api-key': API_KEY || '',
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+    const { searchParams } = new URL(request.url)
+    const events = await fetchEvents(searchParams)
+    return createSuccessResponse(events)
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return createErrorResponse(error.message, error.status)
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json({ error: 'Failed to fetch events' }, { status: 500 });
+    console.error('Unexpected error:', error)
+    return createErrorResponse('Internal server error', 500)
   }
 }
